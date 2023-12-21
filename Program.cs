@@ -1,7 +1,20 @@
+using Microsoft.EntityFrameworkCore;
+using MusicAPIwithoutDocker.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//builder.Services.AddDbContext<ApplicationDbContext>(option =>
+//{
+//    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
+//});
 
+builder.Services.AddDbContext<ApplicationDbContext>(option =>
+{
+    option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultPostGreSQLConnection"));
+});
+// Below Line added as part of postgresql Datetime Issue
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
