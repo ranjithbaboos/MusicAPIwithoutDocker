@@ -8,7 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace MusicAPIwithoutDocker.Controllers
 {
-    [Route("api/SongAPI")]
+    [Route("api/SongAPI/[action]")]
 
     [ApiController]
     public class SongAPIController : ControllerBase
