@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MusicAPIwithoutDocker.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 //builder.Services.AddDbContext<ApplicationDbContext>(option =>
@@ -15,6 +16,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 });
 // Below Line added as part of postgresql Datetime Issue
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("*");
+                          policy.WithMethods("*");
+                          policy.WithExposedHeaders("*");
+                          policy.WithHeaders("*");
+                      });
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -28,6 +40,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
